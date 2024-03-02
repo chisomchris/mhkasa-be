@@ -1,7 +1,6 @@
 const allowedOrigins = [
-  "http://127.0.0.1:3001",
-  "http://localhost:3001",
-  "http://192.168.43.127:3001",
+  "https://localhost:3000",
+  "https://192.168.43.52:3000",
 ];
 
 const ROLES_LIST = {

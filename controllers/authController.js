@@ -4,6 +4,7 @@ const { generateAccess, generateRefresh } = require("../utils/jwtToken");
 
 const handleLogin = async (req, res) => {
   const { username, password } = req.body;
+  console.log(username,password)
   if (!username || !password) {
     return res
       .status(400)
@@ -29,13 +30,15 @@ const handleLogin = async (req, res) => {
 
     await foundUser.save();
 
-    res.cookie("jwt", refreshToken, {
-      httpOnly: true,
-      maxAge: 30 * 24 * 60 * 60 * 1000,
-      sameSite: "None",
-      // secure: true,
-    });
-    res.status(200).json({ accessToken });
+    res
+      .cookie("jwt", refreshToken, {
+        httpOnly: true,
+        maxAge: 30 * 24 * 60 * 60 * 1000,
+        sameSite: "None",
+        secure: true,
+      })
+      .status(200)
+      .json({ accessToken });
   } else {
     res.sendStatus(401);
   }
