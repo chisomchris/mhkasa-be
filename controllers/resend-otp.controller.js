@@ -21,6 +21,12 @@ const resendOtp = async (req, res) => {
     if (!foundUser) {
       return res.status(404).json({ message: "email not found." });
     }
+    if (foundUser.verified && actionType === OTP_ACTION_LIST.CreateUser) {
+      return res.status(409).json({ message: "User already verified." });
+    }
+    if (!foundUser.verified && actionType === OTP_ACTION_LIST.ChangePassword) {
+      return res.status(403).json({ message: "User unverified." });
+    }
 
     const otpCode = getOtp(4);
     const payload = { otp: otpCode, actionType };
@@ -32,7 +38,7 @@ const resendOtp = async (req, res) => {
 
     if (result) {
       // send otp & link to email address here
-      return res.status(200).json({ success: `OTP sent.` });
+      return res.status(200).json({ success: `OTP sent.`, otpCode });
     } else {
       res.status(400).json({ message: "Unable to send otp" });
     }

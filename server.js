@@ -24,9 +24,12 @@ app.use("/v1/logout", require("./routes/logout.route"));
 app.use("/v1/refresh", require("./routes/refresh.route"));
 app.use("/v1/login", require("./routes/login.route"));
 app.use("/v1/register", require("./routes/register.route"));
-app.use("/v1/confirm-otp", require("./routes/confirm-otp)"));
-// app.use("/v1/resend-otp", require("./routes/resend-otp"));
+app.use("/v1/confirm-otp", require("./routes/confirm-otp.route"));
+app.use("/v1/resend-otp", require("./routes/resend-otp.route"));
+app.use("/v1/forgot-password", require("./routes/forgot-password.route"));
+app.use("/v1/reset-password", require("./routes/reset-password.route"));
 app.use(verifyJWT);
+app.use("/v1/user-info", require("./routes/user-info.route"));
 app.use("/v1/employees", require("./routes/employees.route"));
 
 app.all("*", catchAll);

@@ -1,5 +1,6 @@
 const User = require("../models/User");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 const { generateAccess, generateRefresh } = require("../utils/jwtToken");
 const { OTP_ACTION_LIST } = require("../utils/config");
 
@@ -25,10 +26,14 @@ const handleLogin = async (req, res) => {
       const accessToken = generateAccess({
         UserInfo: {
           username: foundUser.username,
+          email: foundUser.email,
           roles,
         },
       });
-      const refreshToken = generateRefresh({ username: foundUser.username });
+      const refreshToken = generateRefresh({
+        email: foundUser.email,
+        username: foundUser.username,
+      });
 
       foundUser.refreshToken = refreshToken;
 
@@ -74,12 +79,13 @@ const handlePasswordChange = async (req, res) => {
       async (err, decoded) => {
         if (
           err ||
-          otp != decoded.otp ||
+          otp != decoded.code ||
           decoded.actionType != OTP_ACTION_LIST.ChangePassword
         )
           return res.status(403).json({ message: "Invalid or expired token" });
         const hashedPassword = await bcrypt.hash(password, 10);
         foundUser.password = hashedPassword;
+        foundUser.otp = "";
         const result = await foundUser.save();
         if (result) {
           return res

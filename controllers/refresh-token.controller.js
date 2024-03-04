@@ -15,12 +15,13 @@ const handleRefreshToken = async (req, res) => {
       refreshToken,
       process.env.REFRESH_TOKEN_SECRET,
       (err, decoded) => {
-        if (err || foundUser.username !== decoded.username)
+        if (err || foundUser.email !== decoded.email)
           return res.sendStatus(403);
         const roles = Object.values(foundUser?.roles).filter((role) => !!role);
         const accessToken = generateAccess({
           UserInfo: {
             username: decoded.username,
+            email: decoded.email,
             roles,
           },
         });
