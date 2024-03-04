@@ -1,5 +1,4 @@
 const express = require("express");
-const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
 const useCors = require("./middlewares/cors");
 const catchAll = require("./middlewares/catchAll");
@@ -21,12 +20,14 @@ app.use(useCors());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
-app.use("/v1/logout", require("./routes/logout"));
-app.use("/v1/refresh", require("./routes/refresh"));
-app.use("/v1/login", require("./routes/login"));
-app.use("/v1/register", require("./routes/register"));
+app.use("/v1/logout", require("./routes/logout.route"));
+app.use("/v1/refresh", require("./routes/refresh.route"));
+app.use("/v1/login", require("./routes/login.route"));
+app.use("/v1/register", require("./routes/register.route"));
+app.use("/v1/confirm-otp", require("./routes/confirm-otp)"));
+// app.use("/v1/resend-otp", require("./routes/resend-otp"));
 app.use(verifyJWT);
-app.use("/v1/employees", require("./routes/employees"));
+app.use("/v1/employees", require("./routes/employees.route"));
 
 app.all("*", catchAll);
 

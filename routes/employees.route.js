@@ -1,5 +1,5 @@
 const { Router } = require("express");
-const { getEmployees } = require("../controllers/employeesController");
+const { getEmployees } = require("../controllers/employees.controller");
 const verifyRoles = require("../middlewares/verifyRoles");
 const { ROLES_LIST } = require("../utils/config");
 const router = Router();

@@ -1,5 +1,3 @@
-// const User = require("../models/User");
-
 const getEmployees = async (req, res) => {
   const employees = [
     { name: "chisom", age: 23 },
