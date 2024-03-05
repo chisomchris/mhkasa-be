@@ -16,7 +16,7 @@ const userAgent = async (req, res, next) => {
     expressIp,
     Ip,
   });
-  req.client = `${ip}-${userAgent}`;
+  req.client = `${expressIp}-${userAgent}`;
   next();
 };
 
