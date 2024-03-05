@@ -8,6 +8,7 @@ const PORT = process.env.PORT || 5000;
 const connectDB = require("./utils/dbConnection");
 const verifyJWT = require("./middlewares/verifyJWT");
 const credentials = require("./middlewares/credentials");
+const { userAgent } = require("./middlewares/userAgent");
 
 const app = express();
 // parse cookie sent along side requests
@@ -20,6 +21,7 @@ app.use(useCors());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
+app.use(userAgent);
 app.use("/v1/logout", require("./routes/logout.route"));
 app.use("/v1/refresh", require("./routes/refresh.route"));
 app.use("/v1/login", require("./routes/login.route"));

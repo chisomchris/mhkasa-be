@@ -45,6 +45,7 @@ const handleLogin = async (req, res) => {
           maxAge: 30 * 24 * 60 * 60 * 1000,
           sameSite: "None",
           secure: true,
+          partitioned: true,
         })
         .status(200)
         .json({
