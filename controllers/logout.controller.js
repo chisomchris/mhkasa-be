@@ -8,12 +8,16 @@ const handleLogout = async (req, res) => {
     const foundUser = await User.findOne({ refreshToken }).exec();
 
     if (!foundUser) {
-      res.clearCookie("jwt", {
-        httpOnly: true,
-        sameSite: "None",
-        secure: true,
-        partitioned: true,
-      });
+      // res.clearCookie("jwt", {
+      //   httpOnly: true,
+      //   sameSite: "None",
+      //   secure: true,
+      //   partitioned: true,
+      // });
+      const cookieString = `jwt=;HttpOnly;Secure;Partitioned;SameSite=None;Path=/;Expires=${new Date(
+        0
+      )}`;
+      res.setHeader("Set-Cookie", cookieString);
       return res.sendStatus(204);
     }
     // delete refresh token in DB
@@ -21,12 +25,16 @@ const handleLogout = async (req, res) => {
 
     const result = await foundUser.save();
     if (result) {
-      res.clearCookie("jwt", {
-        httpOnly: true,
-        sameSite: "None",
-        secure: true,
-        partitioned: true,
-      });
+      // res.clearCookie("jwt", {
+      //   httpOnly: true,
+      //   sameSite: "None",
+      //   secure: true,
+      //   partitioned: true,
+      // });
+      const cookieString = `jwt=;HttpOnly;Secure;Partitioned;SameSite=None;Path=/;Expires=${new Date(
+        0
+      )}`;
+      res.setHeader("Set-Cookie", cookieString);
       return res.sendStatus(204);
     } else {
       res.sendStatus(400).json({ message: "User not logged out" });

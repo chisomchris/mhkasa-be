@@ -39,20 +39,18 @@ const handleLogin = async (req, res) => {
 
       await foundUser.save();
 
-      res
-        .cookie("jwt", refreshToken, {
-          httpOnly: true,
-          maxAge: 30 * 24 * 60 * 60 * 1000,
-          sameSite: "None",
-          secure: true,
-          partitioned: true,
-        })
-        .status(200)
-        .json({
-          email: foundUser.email,
-          username: foundUser.username,
-          accessToken,
-        });
+      const now = Date.now();
+      const cookieString = `jwt=${refreshToken};HttpOnly;Secure;Partitioned;SameSite=None;Path=/;Max-Age=${
+        30 * 24 * 60 * 60 * 1000
+      };Expires=${new Date(now + 30 * 24 * 60 * 60 * 1000)}`;
+
+      res.setHeader("Set-Cookie", cookieString);
+
+      return res.status(200).json({
+        email: foundUser.email,
+        username: foundUser.username,
+        accessToken,
+      });
     } else {
       res.sendStatus(401);
     }
