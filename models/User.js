@@ -27,7 +27,13 @@ const UserSchema = new Schema({
     editor: Number,
   },
 
-  refreshToken: String,
+  // refreshToken: String,
+  refreshTokens: [
+    {
+      client: String,
+      token: String,
+    },
+  ],
 
   verified: {
     type: Boolean,

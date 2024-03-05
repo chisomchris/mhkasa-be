@@ -20,8 +20,9 @@ app.use(useCors());
 // parse request body
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
-
+// add client to request
 app.use(userAgent);
+
 app.use("/v1/logout", require("./routes/logout.route"));
 app.use("/v1/refresh", require("./routes/refresh.route"));
 app.use("/v1/login", require("./routes/login.route"));

@@ -1,7 +1,7 @@
 const userAgent = async (req, res, next) => {
   const userAgent = req.headers["user-agent"];
-
-  console.log(userAgent);
+  const ip = req.ip;
+  req.client = `${ip}-${userAgent}`;
   next();
 };
 

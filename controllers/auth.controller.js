@@ -7,6 +7,7 @@ const { OTP_ACTION_LIST } = require("../utils/config");
 const handleLogin = async (req, res) => {
   try {
     const { email, password } = req.body;
+    const client = req.client;
     if (!email || !password) {
       return res
         .status(400)
@@ -30,17 +31,29 @@ const handleLogin = async (req, res) => {
           roles,
         },
       });
-      const refreshToken = generateRefresh({
+      const token = generateRefresh({
         email: foundUser.email,
         username: foundUser.username,
       });
+      const refreshToken = {
+        token,
+        client,
+      };
 
-      foundUser.refreshToken = refreshToken;
+      const userIndex = foundUser.refreshTokens.findIndex(
+        (x) => x?.client === client
+      );
+
+      if (userIndex > -1) {
+        foundUser.refreshTokens[userIndex].token = token;
+      } else {
+        foundUser.refreshTokens.push(refreshToken);
+      }
 
       await foundUser.save();
 
       const now = Date.now();
-      const cookieString = `jwt=${refreshToken};HttpOnly;Secure;Partitioned;SameSite=None;Path=/;Max-Age=${
+      const cookieString = `jwt=${token};HttpOnly;Secure;Partitioned;SameSite=None;Path=/;Max-Age=${
         30 * 24 * 60 * 60 * 1000
       };Expires=${new Date(now + 30 * 24 * 60 * 60 * 1000)}`;
 
