@@ -1,23 +1,13 @@
-const IP = require("ip");
+const { generateUBIT, setCookie } = require("../utils/util");
 
 const userAgent = async (req, res, next) => {
-  const userAgent = req.headers["user-agent"];
-  const remoteAddress = req.socket.remoteAddress;
-  const localAddress = req.socket.localAddress;
-  const localPort = req.socket.localPort;
-  const remotePort = req.socket.remotePort;
-  const expressIp = req.ip;
-  const Ip = IP.address();
-  console.log({
-    remoteAddress,
-    localAddress,
-    localPort,
-    remotePort,
-    expressIp,
-    Ip,
-    
-  });
-  req.client = `${expressIp}-${userAgent}`;
+  const cookies = req.cookies;
+  let ubit = cookies?.ubit;
+  if (!cookies?.ubit) {
+    ubit = await generateUBIT();
+    setCookie(res, "ubit", ubit, 365);
+  }
+  req.client = ubit;
   next();
 };
 

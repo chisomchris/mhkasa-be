@@ -2,6 +2,7 @@ const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 const { OTP_ACTION_LIST } = require("../utils/config");
 const { generateRefresh } = require("../utils/jwtToken");
+const { setCookie } = require("../utils/util");
 
 const confirmOtp = async (req, res) => {
   try {
@@ -31,19 +32,19 @@ const confirmOtp = async (req, res) => {
           email: foundUser.email,
           username: foundUser.username,
         });
+
         foundUser.verified = true;
         foundUser.otp = "";
-        foundUser.refreshToken = refreshToken;
+        foundUser.refreshTokens.push({
+          client: req.client,
+          token: refreshToken,
+        });
+
         const result = await foundUser.save();
 
         if (result) {
+          setCookie(res, "jwt", refreshToken, 30);
           return res
-            .cookie("jwt", refreshToken, {
-              httpOnly: true,
-              maxAge: 30 * 24 * 60 * 60 * 1000,
-              sameSite: "None",
-              secure: true,
-            })
             .status(200)
             .json({ success: `Account succesfully created` });
         } else {

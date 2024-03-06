@@ -3,6 +3,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { generateAccess, generateRefresh } = require("../utils/jwtToken");
 const { OTP_ACTION_LIST } = require("../utils/config");
+const { setCookie } = require("../utils/util");
 
 const handleLogin = async (req, res) => {
   try {
@@ -52,12 +53,7 @@ const handleLogin = async (req, res) => {
 
       await foundUser.save();
 
-      const now = Date.now();
-      const cookieString = `jwt=${token};HttpOnly;Secure;Partitioned;SameSite=None;Path=/;Max-Age=${
-        30 * 24 * 60 * 60 * 1000
-      };Expires=${new Date(now + 30 * 24 * 60 * 60 * 1000)}`;
-
-      res.setHeader("Set-Cookie", cookieString);
+      setCookie(res, "jwt", token, 30);
 
       return res.status(200).json({
         email: foundUser.email,
@@ -93,8 +89,10 @@ const handlePasswordChange = async (req, res) => {
           err ||
           otp != decoded.code ||
           decoded.actionType != OTP_ACTION_LIST.ChangePassword
-        )
+        ) {
+          console.log({ err, decoded });
           return res.status(403).json({ message: "Invalid or expired token" });
+        }
         const hashedPassword = await bcrypt.hash(password, 10);
         foundUser.password = hashedPassword;
         foundUser.otp = "";

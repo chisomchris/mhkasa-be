@@ -1,7 +1,7 @@
 const allowedOrigins = [
   "https://localhost:3000",
   "https://192.168.43.52:3000",
-  "https://mhkasa-fe.vercel.app/",
+  "https://mhkasa-fe.vercel.app",
 ];
 
 const ROLES_LIST = {

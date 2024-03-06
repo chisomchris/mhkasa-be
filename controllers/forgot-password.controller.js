@@ -30,7 +30,7 @@ const forgotPassword = async (req, res) => {
     const result = await foundUser.save();
     if (result) {
       // send otp to user email address
-      return res.status(201).json({ message: `OTP sent to ${email}`, otpCode });
+      return res.status(200).json({ message: `OTP sent to ${email}`, otpCode });
     }
   } catch (error) {
     res.status(500).json({ message: error.message });

@@ -29,8 +29,7 @@ const resendOtp = async (req, res) => {
     }
 
     const otpCode = getOtp(4);
-    const payload = { otp: otpCode, actionType };
-    const otp = generateOtp(payload);
+    const otp = generateOtp({ code: otpCode, actionType });
 
     foundUser.otp = otp;
 
