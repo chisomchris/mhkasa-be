@@ -1,13 +1,15 @@
 const verifyRoles = (...allowedRoles) => {
   return (req, res, next) => {
     try {
-      if (!req?.roles) return res.sendStatus(401);
+      if (!req?.roles)
+        return res.status(401).json({ message: "Unauthorized Request" });
       const rolesArray = [...allowedRoles];
       const isAllowed = req.roles
         .map((role) => rolesArray.includes(role))
         .find((val) => val === true);
 
-      if (!isAllowed) return res.sendStatus(401);
+      if (!isAllowed)
+        return res.status(401).json({ message: "Unauthorized Request" });
       next();
     } catch (error) {
       next(error);
