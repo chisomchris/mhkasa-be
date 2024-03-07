@@ -3,7 +3,7 @@ const { generateOtp } = require("../utils/jwtToken");
 const { getOtp } = require("../utils/generate-otp");
 const { OTP_ACTION_LIST } = require("../utils/config");
 
-const forgotPassword = async (req, res) => {
+const forgotPassword = async (req, res, next) => {
   // register new user
   const { email } = req.body;
   if (!email) return res.status(400).json({ message: "Email is required." });
@@ -33,8 +33,7 @@ const forgotPassword = async (req, res) => {
       return res.status(200).json({ message: `OTP sent to ${email}`, otpCode });
     }
   } catch (error) {
-    console.log(error);
-    return res.status(500).json({ message: "Internal Server Error" });
+    next(error);
   }
 };
 
