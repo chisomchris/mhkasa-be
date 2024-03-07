@@ -1,11 +1,15 @@
 const { allowedOrigins } = require("../utils/config");
 
 const credentials = (req, res, next) => {
-  const origin = req.headers.origin;
-  if (allowedOrigins.includes(origin)) {
-    res.header("Access-Control-Allow-Credentials", true);
+  try {
+    const origin = req.headers.origin;
+    if (allowedOrigins.includes(origin)) {
+      res.header("Access-Control-Allow-Credentials", true);
+    }
+    next();
+  } catch (error) {
+    next(error);
   }
-  next();
 };
 
 module.exports = credentials;

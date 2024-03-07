@@ -1,6 +1,6 @@
 const User = require("../models/User");
 const { setCookie } = require("../utils/util");
-const handleLogout = async (req, res) => {
+const handleLogout = async (req, res, next) => {
   try {
     const cookies = req.cookies;
     if (!cookies?.jwt) return res.sendStatus(204);
@@ -30,7 +30,7 @@ const handleLogout = async (req, res) => {
       res.sendStatus(400).json({ message: "User not logged out" });
     }
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    next(error);
   }
 };
 

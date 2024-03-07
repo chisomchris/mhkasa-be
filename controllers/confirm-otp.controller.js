@@ -4,7 +4,7 @@ const { OTP_ACTION_LIST } = require("../utils/config");
 const { generateRefresh } = require("../utils/jwtToken");
 const { setCookie } = require("../utils/util");
 
-const confirmOtp = async (req, res) => {
+const confirmOtp = async (req, res, next) => {
   try {
     const { email, otp } = req.body;
     if (!email || !otp) {
@@ -53,7 +53,7 @@ const confirmOtp = async (req, res) => {
       }
     );
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    next(error);
   }
 };
 

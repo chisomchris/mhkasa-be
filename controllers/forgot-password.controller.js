@@ -33,7 +33,8 @@ const forgotPassword = async (req, res) => {
       return res.status(200).json({ message: `OTP sent to ${email}`, otpCode });
     }
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.log(error);
+    return res.status(500).json({ message: "Internal Server Error" });
   }
 };
 

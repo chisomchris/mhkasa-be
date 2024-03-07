@@ -1,4 +1,4 @@
-const getEmployees = async (req, res) => {
+const getEmployees = async (req, res, next) => {
   const employees = [
     { name: "chisom", age: 23 },
     { name: "Ayomide", age: 24 },
@@ -10,7 +10,7 @@ const getEmployees = async (req, res) => {
   try {
     return res.status(200).json({ employees });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    next(error);
   }
 };
 

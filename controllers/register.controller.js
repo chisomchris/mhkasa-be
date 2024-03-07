@@ -4,7 +4,7 @@ const { generateOtp } = require("../utils/jwtToken");
 const { getOtp } = require("../utils/generate-otp");
 const { OTP_ACTION_LIST } = require("../utils/config");
 
-const handleRegister = async (req, res) => {
+const handleRegister = async (req, res, next) => {
   // register new user
   const { username, password, email, phone } = req.body;
   if (!username || !password || !email || !phone)
@@ -42,7 +42,7 @@ const handleRegister = async (req, res) => {
         .json({ success: `New user ${username} created`, otpCode });
     }
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    next(error);
   }
 };
 

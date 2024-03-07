@@ -5,7 +5,7 @@ const { generateAccess, generateRefresh } = require("../utils/jwtToken");
 const { OTP_ACTION_LIST } = require("../utils/config");
 const { setCookie } = require("../utils/util");
 
-const handleLogin = async (req, res) => {
+const handleLogin = async (req, res, next) => {
   try {
     const { email, password } = req.body;
     const client = req.client;
@@ -61,14 +61,14 @@ const handleLogin = async (req, res) => {
         accessToken,
       });
     } else {
-      res.sendStatus(401);
+      return res.status(401).json({ message: "Invalid Password" });
     }
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    next(error);
   }
 };
 
-const handlePasswordChange = async (req, res) => {
+const handlePasswordChange = async (req, res, next) => {
   try {
     const { email, password, otp } = req.body;
     if (!email || !password || !otp) {
@@ -107,7 +107,7 @@ const handlePasswordChange = async (req, res) => {
       }
     );
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    next(error);
   }
 };
 

@@ -2,7 +2,7 @@ const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 const { generateAccess } = require("../utils/jwtToken");
 
-const handleRefreshToken = async (req, res) => {
+const handleRefreshToken = async (req, res, next) => {
   try {
     const cookies = req.cookies;
     if (!cookies?.jwt) return res.sendStatus(401);
@@ -32,7 +32,9 @@ const handleRefreshToken = async (req, res) => {
         res.json({ accessToken });
       }
     );
-  } catch (error) {}
+  } catch (error) {
+    next(error);
+  }
 };
 
 module.exports = { handleRefreshToken };

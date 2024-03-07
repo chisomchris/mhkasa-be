@@ -3,7 +3,7 @@ const { generateOtp } = require("../utils/jwtToken");
 const { OTP_ACTION_LIST } = require("../utils/config");
 const { getOtp } = require("../utils/generate-otp");
 
-const resendOtp = async (req, res) => {
+const resendOtp = async (req, res, next) => {
   try {
     const { email, actionType } = req.body;
     if (!email || !actionType) {
@@ -42,7 +42,7 @@ const resendOtp = async (req, res) => {
       res.status(400).json({ message: "Unable to send otp" });
     }
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    next(error);
   }
 };
 
