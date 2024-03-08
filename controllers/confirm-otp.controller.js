@@ -12,7 +12,7 @@ const confirmOtp = async (req, res, next) => {
     }
     const foundUser = await User.findOne({ email }).exec();
     if (!foundUser) {
-      return res.sendStatus(401);
+      return res.status(401).json({ message: "User not found." });
     }
     if (foundUser.verified) {
       return res.status(409).json({ message: "User already verified." });

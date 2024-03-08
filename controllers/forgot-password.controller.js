@@ -4,16 +4,12 @@ const { getOtp } = require("../utils/generate-otp");
 const { OTP_ACTION_LIST } = require("../utils/config");
 
 const forgotPassword = async (req, res, next) => {
-  // register new user
   const { email } = req.body;
   if (!email) return res.status(400).json({ message: "Email is required." });
-
-  // check for duplicate
   const foundUser = await User.findOne({ email }).exec();
-  if (!foundUser) return res.sendStatus(404);
-
+  if (!foundUser) return res.status(404).json({ message: "User not found" });
   if (!foundUser.verified) {
-    return res.status(403).json({ message: "User unverified." });
+    return res.status(403).json({ message: "User unverified" });
   }
 
   try {

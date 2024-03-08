@@ -1,8 +1,10 @@
 require("dotenv").config();
 const jwt = require("jsonwebtoken");
 
-const generateAccess = (payload) =>
-  jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "1m" });
+const generateAccess = (payload, isPrivate) =>
+  jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, {
+    expiresIn: isPrivate ? "60m" : "1m",
+  });
 
 const generateRefresh = (payload) =>
   jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET, { expiresIn: "7d" });
